@@ -16,5 +16,33 @@ export const getPostsNetwork = async () => {
     } catch (err) {
         throw err
     }
+}
+
+export const addPostNetwork = async (post: string) => {
+    const accessToken = store.getState().authenticator.accessToken
+    try {
+        let response = await axios.post('http://localhost:8080/api/user/add-post', {post}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        return response
+    } catch (err) {
+        throw err
+    }
+}
+
+export const removePostNetwork = async (id: string) => {
+    const accessToken = store.getState().authenticator.accessToken
+    try {
+        let response = await axios.post('http://localhost:8080/api/user/remove-post', {id}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        return response
+    } catch (err) {
+        throw err
+    }
 
 }
