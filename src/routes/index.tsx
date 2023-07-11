@@ -6,9 +6,11 @@ import {
 } from 'react-router-dom'
 
 import App from '../App'
-import SignIn from './Authentication'
+import SignIn from './Authentication/login'
 import { useAppSelector } from '../redux/hooks'
 import Posts from './Posts'
+import Todos from './Todos'
+import SignUp from './Authentication/signup'
 
 
 export default function Router() {
@@ -34,6 +36,14 @@ export default function Router() {
             </PrivateRouteAuth> 
             }
         />
+        <Route
+          path="/sign-up"
+          element={
+            <PrivateRouteAuth>
+              <SignUp />
+            </PrivateRouteAuth> 
+            }
+        />
        
         {/* APP */}
         <Route
@@ -44,6 +54,9 @@ export default function Router() {
             </PrivateRoute>
           }>
         <Route path='/posts' element={<Posts />}/>
+        <Route path='/todos' element={<Todos />}/>
+        <Route path='/contact' element={<>Henüz yapılmadı...</>}/>
+        <Route path='*' element={<>Not Found...</>}/>
         </Route>
 
       </Routes>

@@ -1,8 +1,5 @@
 import axios from "axios";
-import { useAppSelector } from "../../redux/hooks";
 import store from "../../redux/store";
-
-
 
 export const getPostsNetwork = async () => {
     const accessToken = store.getState().authenticator.accessToken

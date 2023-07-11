@@ -1,32 +1,25 @@
 import { Button, Form, Input, Layout, message } from 'antd';
-import { loginNetwork } from './network';
-import { UserLogin } from './type';
-import { useAppDispatch } from '../../redux/hooks';
-import { setUser } from '../../redux/authenticator';
+import { signupNetwork } from './network';
+import { UserSignUp } from './type';
 import { useNavigate } from 'react-router-dom';
 
-function SignIn() {
-    const dispatch = useAppDispatch()
+function SignUp() {
+
     const navigate = useNavigate()
-    const onFinish = async (values: UserLogin) => {
+    const onFinish = async (values: UserSignUp) => {
         try {
-            let response =  await loginNetwork(values)
-            dispatch(setUser({
-             loading: false,
-             user: response.data.user,
-             accessToken: response.data.accessToken
-            }))
-            message.success("Giriş Başarılı")
-            navigate('/')
-        } catch(err: any) {
+            await signupNetwork(values)
+            message.success("Kayıt Başarılı")
+            navigate('/login')
+        } catch (err: any) {
             message.error(err.response.data.message)
         }
-     };
-     
-     const onFinishFailed = (errorInfo: any) => {
-         console.log('Failed:', errorInfo);
-     };
-    
+    };
+
+    const onFinishFailed = (errorInfo: any) => {
+        console.log('Failed:', errorInfo);
+    };
+
     return (
         <Layout style={{ minHeight: '100vh' }} className='flex justify-center items-center w-full bg-blue-100'>
             <Form
@@ -38,7 +31,21 @@ function SignIn() {
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
-                <Form.Item
+                <Form.Item className='my-0'
+                    label='İsim'
+                    name='name'
+                    rules={[{ required: true, message: 'İsim Gerekli' }]}
+                >
+                    <Input placeholder='İsim' />
+                </Form.Item>
+                <Form.Item className='my-0'
+                    label='Soyisim'
+                    name='surname'
+                    rules={[{ required: true, message: 'Soyisim Gerekli' }]}
+                >
+                    <Input placeholder='Soyisim' />
+                </Form.Item>
+                <Form.Item className='my-0'
                     label="E-Mail"
                     name="email"
                     rules={[{ required: true, message: 'Email gerekli' }]}
@@ -46,7 +53,7 @@ function SignIn() {
                     <Input />
                 </Form.Item>
 
-                <Form.Item
+                <Form.Item className='mt-0'
                     label="Parola"
                     name="password"
                     rules={[{ required: true, message: 'Şifre gerekli' }]}
@@ -56,7 +63,7 @@ function SignIn() {
 
                 <Form.Item>
                     <Button htmlType="submit" className='w-full bg-red-500 text-red hover:outline-none'>
-                        Giriş Yap
+                        Kayıt Ol
                     </Button>
                 </Form.Item>
             </Form>
@@ -64,4 +71,4 @@ function SignIn() {
     )
 }
 
-export default SignIn
+export default SignUp

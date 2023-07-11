@@ -20,7 +20,7 @@ function App() {
         <nav>
           <ul className='flex space-x-4'>
             <li><Link to='/posts'>Postlarım </Link></li>
-            <li><Link to='/about-me'>Hakkımda </Link></li>
+            <li><Link to='/todos'>Yapacaklarım</Link></li>
             <li><Link to='/contact'>İletişim </Link></li>
           </ul>
         </nav>
