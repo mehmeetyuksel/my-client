@@ -4,13 +4,18 @@ import { UserLogin } from './type';
 import { useAppDispatch } from '../../redux/hooks';
 import { setUser } from '../../redux/authenticator';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 function SignIn() {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const axiosPrivate = useAxiosPrivate()
     const onFinish = async (values: UserLogin) => {
+        
         try {
-            let response = await loginNetwork(values)
+            let response = await axiosPrivate.post('/log-in', {
+                ...values
+            })
             dispatch(setUser({
                 loading: false,
                 user: response.data.user,
@@ -19,6 +24,7 @@ function SignIn() {
             message.success("Giriş Başarılı")
             navigate('/')
         } catch (err: any) {
+            console.log(err.response)
             message.error(err.response.data.message)
         }
     };

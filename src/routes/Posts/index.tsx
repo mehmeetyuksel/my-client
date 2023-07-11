@@ -1,29 +1,30 @@
 import { Button, Col, Form, Row, message } from 'antd'
-import { addPostNetwork, getPostsNetwork, removePostNetwork } from './network'
 import { useEffect, useState } from 'react'
 import { Input } from 'antd';
 import moment from 'moment';
-moment.locale('tr')
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const { TextArea } = Input;
 
-
 function Posts() {
+
     const [form] = Form.useForm();
     const [posts, setPosts] = useState<string[]>([])
 
+    const axiosPrivate = useAxiosPrivate()
+
     const getPosts = async () => {
         try {
-            let response = await getPostsNetwork()
+            let response = await axiosPrivate.get('/api/user/get-posts')
             setPosts(response.data.posts)
         } catch (err: any) {
             message.error(err.response.data.message)
         }
     }
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (post: string) => {
         try {
-            await addPostNetwork(values.post)
+            await axiosPrivate.post('/api/user/add-post', post)
             message.success("Post başarıyla kaydedildi")
             await getPosts()
             form.resetFields()
@@ -35,7 +36,7 @@ function Posts() {
 
     const removePost = async (id: string) => {
         try {
-            await removePostNetwork(id)
+            await  axiosPrivate.post('/api/user/remove-post', {id: id})
             message.success('Post başarıyla silindi...')
             await getPosts()
         } catch (err: any) {
@@ -53,7 +54,7 @@ function Posts() {
             <div className='gap-3 grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4'>
                 {
                     posts.length ? posts.map((post: any, i: number) => (
-                        <Col>
+                        <Col key={i}>
                             <div className='w-full bg-slate-300 rounded-md'>
                                 <div className='flex justify-between'>
                                     <span>{post.post}</span>
@@ -87,7 +88,6 @@ function Posts() {
                     </Form.Item>
                 </Form>
             </Row>
-
         </div>
 
     )

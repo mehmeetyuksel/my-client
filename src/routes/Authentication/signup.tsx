@@ -2,16 +2,21 @@ import { Button, Form, Input, Layout, message } from 'antd';
 import { signupNetwork } from './network';
 import { UserSignUp } from './type';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 function SignUp() {
 
     const navigate = useNavigate()
+    const axiosPrivate = useAxiosPrivate()
     const onFinish = async (values: UserSignUp) => {
         try {
-            await signupNetwork(values)
+            await axiosPrivate.post('http://localhost:8080/sign-up', {
+                ...values
+            })
             message.success("Kayıt Başarılı")
             navigate('/login')
         } catch (err: any) {
+            console.log(err)
             message.error(err.response.data.message)
         }
     };
